@@ -15,6 +15,7 @@ import { config } from './config/config';
 import { TerminusModule } from '@nestjs/terminus';
 import { HealthController } from './health/health.controller';
 import path from 'path';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
@@ -57,6 +58,10 @@ import path from 'path';
     ConfigModule.forRoot({
       isGlobal: true,
       load: [config],
+    }),
+    ThrottlerModule.forRoot({
+      ttl: parseInt(process.env.THROTTLE_TTL),
+      limit: parseInt(process.env.THROTTLE_LIMIT),
     }),
     TerminusModule
   ],

@@ -1,10 +1,11 @@
 import { OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer, WsResponse } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { AppService } from 'src/app.service';
-import { Logger } from '@nestjs/common';
+import { Logger, UseGuards } from '@nestjs/common';
 import { config } from '../config/config';
+import { WsThrottlerGuard } from 'src/guard/wsThrottlerGuard';
 const appConfig = config().app;
-
+@UseGuards(WsThrottlerGuard)
 @WebSocketGateway({
   timeout: appConfig.socket_timeout,
   pingTimeout: appConfig.socket_ping_timeout,

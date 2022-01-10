@@ -29,6 +29,7 @@
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/platform-socket.io": "^8.0.6",
     "@nestjs/terminus": "^8.0.1",
+    "@nestjs/throttler": "^2.0.0",
     "@nestjs/websockets": "^8.0.6",
     "nest-winston": "^1.6.0",
     "reflect-metadata": "^0.1.13",
