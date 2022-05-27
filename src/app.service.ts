@@ -4,9 +4,9 @@ import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
 import { jsonData } from '../test/chatResponses';
 import { v4 as uuid } from 'uuid';
+
 @Injectable()
 export class AppService {
-
   private logger: Logger = new Logger('AppService');
 
   constructor(
@@ -26,34 +26,40 @@ export class AppService {
     const adapterEndpoint = this.configService.get('ADAPTER_URL');
     try {
       const reqst = {
-        "body": req.content.body,
-        "userId":req.content.userId,
-        "appId":req.content.appId,
-        "channel":req.content.channel,
-        "from":req.content.From,
-        "context":req.content.context,
-        "to":req.to,
-        "messageId": this.randomId()
-      }
+        body: req.content.text,
+        media: req.content.media,
+        userId: req.content.userId,
+        appId: req.content.appId,
+        channel: req.content.channel,
+        from: req.content.from,
+        context: req.content.context,
+        to: req.to,
+        messageId: this.randomId(),
+      };
       const params = JSON.stringify(reqst);
-      this.logger.log({ message: `Adapter Request => ${params}`});
+      console.log({ params });
+      this.logger.log({ message: `Adapter Request => ${params}` });
       this.httpService
-        .post(`${adapterEndpoint}/diksha/web`, params, {
+        .post(`${adapterEndpoint}`, params, {
           headers: {
             'Content-Type': 'application/json',
           },
         })
         .subscribe(
           (res) => {
-            this.logger.log({ message: `Request sent to UCI web Adapter`});
+            this.logger.log({ message: `Request sent to UCI web Adapter` });
           },
           (err) => {
-            this.logger.log({ message: `Error while requesting UCI web Adapter => ${err}`});
+            this.logger.log({
+              message: `Error while requesting UCI web Adapter => ${err}`,
+            });
           },
         );
     } catch (error) {
       if (error) {
-        this.logger.log({ message: `Sending request to adapter failed => ${error.message}`});
+        this.logger.log({
+          message: `Sending request to adapter failed => ${error.message}`,
+        });
       }
     }
   }

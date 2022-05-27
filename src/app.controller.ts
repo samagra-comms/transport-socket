@@ -12,7 +12,9 @@ export class AppController {
   @Post('/adapterOutbound')
   adapterOutbound(@Request() req) {
     try {
-      this.logger.log(`Received Response from Adapter => ${JSON.stringify(req.body)}`);
+      this.logger.log(
+        `Received Response from Adapter => ${JSON.stringify(req.body)}`,
+      );
       const { message, to } = req.body;
       this.wsg.server
         .to(to)

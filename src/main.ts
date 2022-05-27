@@ -6,6 +6,7 @@ import { config } from './config/config';
 
 async function bootstrap() {
   const appConfig = config().app;
+  console.log({ appConfig });
   const app = await NestFactory.create(AppModule);
   app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
   app.useWebSocketAdapter(new RedisIoAdapter(app));

@@ -1,8 +1,8 @@
 export const config = () => ({
   app: {
-    redisport: process.env.REDIS_PORT,
-    redishost: process.env.REDIS_HOST,
-    port: process.env.SERVER_PORT,
+    redisPort: process.env.REDIS_PORT || 6380,
+    redisHost: process.env.REDIS_HOST || '0.0.0.0',
+    port: process.env.SERVER_PORT || 3005,
     bot_session_event: process.env.SKT_SESSION_EVT || 'session',
     socket_timeout: process.env.SKT_TIMEOUT || 60000,
     socket_ping_interval: process.env.SKT_PING_INTERVAL || 60000,

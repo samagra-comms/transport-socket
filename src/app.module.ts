@@ -1,6 +1,6 @@
 import * as winston from 'winston';
 
-import { Logger, Module } from '@nestjs/common';
+import { CacheModule, Logger, Module } from '@nestjs/common';
 import {
   WinstonModule,
   utilities as nestWinstonModuleUtilities,
@@ -9,11 +9,11 @@ import {
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
+import { HealthController } from './health/health.controller';
 import { HttpModule } from '@nestjs/axios';
 import { SocketGateway } from './socket/socket.gateway';
-import { config } from './config/config';
 import { TerminusModule } from '@nestjs/terminus';
-import { HealthController } from './health/health.controller';
+import { config } from './config/config';
 import path from 'path';
 
 @Module({
@@ -58,7 +58,8 @@ import path from 'path';
       isGlobal: true,
       load: [config],
     }),
-    TerminusModule
+    TerminusModule,
+    CacheModule.register(),
   ],
   controllers: [AppController, HealthController],
   providers: [AppService, SocketGateway, Logger],

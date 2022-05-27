@@ -1,0 +1,47 @@
+name: Docker Build
+
+on:
+  workflow_dispatch:
+    input:
+      tags:
+        description: 'Test scenario tags'
+        required: true 
+        type: boolean
+  push:
+    branches: [master, uci-pwa]
+  pull_request:
+    branches: [master, uci-pwa]
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    env:
+      REDIS_HOST: 0.0.0.0
+      REDIS_PORT: 6380
+      SERVER_PORT: 3005
+      ADAPTER_URL: "http://143.110.255.220:8080/pwa/web"
+    timeout-minutes: 40
+    steps:
+    - run: curl --version
+    - uses: actions/checkout@v2
+    - run: env
+    - name: Build container image
+      run: docker build -t test-container-image .
+    - name: Start Redis
+      run: docker run --name enketo-redis-cache -p 6380:6379 -d redis
+      timeout-minutes: 5
+    - name: Launch container
+      run: docker run --name test-container -dp 3005:3005 test-container-image
+      timeout-minutes: 5
+    - run: docker ps
+    # - name: Sleep for 100s
+    #   uses: juliangruber/sleep-action@v1
+    #   with:
+    #     time: 100s
+    - run: docker logs test-container
+    # - run: curl -s 0.0.0.0:3005/health
+    # - name: Wait for Service to start
+    #   run: while ! curl -s 0.0.0.0:3005/health; do sleep 1; done
+    #   timeout-minutes: 1
+    - name: Check API health
+      run: curl -s 0.0.0.0:3005/health
